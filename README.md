@@ -3,6 +3,14 @@
 > **基于 RTLPlayground 二次开发 · 全中文图形化管理 · 开源免费发布**
 > 开发者：**zakozako2233**
 
+![版本](https://img.shields.io/badge/最新版本-v5.9-brightgreen)
+![芯片](https://img.shields.io/badge/交换芯片-RTL8372N-blue)
+![存储](https://img.shields.io/badge/Flash-4MB-orange)
+![界面](https://img.shields.io/badge/界面-全中文-green)
+![聚合](https://img.shields.io/badge/链路聚合-XOR%20断线降级-purple)
+![安全](https://img.shields.io/badge/安全-防爆破%2BACL%2BNTP-yellow)
+![许可](https://img.shields.io/badge/许可-开源自定义-red)
+
 把一台百元级**非网管交换机**，变成带 **ACL 访问控制、链路聚合、风暴抑制、NTP 对时、登录防爆破、实时监控**的全能管理交换机。全部功能均已在真机（睿颖 FG-4GT-2SX，RTL8372N 芯片）实测通过。
 
 ---
