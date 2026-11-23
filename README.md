@@ -398,7 +398,7 @@
 | **V5.8 公开版** | `FG-4GT-2SX_rtlplayground_V5.8_公开版.bin` | 密码统一为 admin | `514f822203114780f4179703625b4070` |
 | **V5.9 稳定版** | `FG-4GT-2SX_rtlplayground_V5.9_公开版_稳定版.bin` | LED 寄存器级灯语修复 | `cd4c589bb55111d93e6965380a4de2b2` |
 | **V6.0 稳定版** | `FG-4GT-2SX_rtlplayground_V6.0_stable.bin` | 手机版保存持久化修复 + 登录全兼容 | `014df8a156d56e836222a69359e407ec` |
-| **V6.1 修复版** | `rtlplayground-v6.1-SWGT024_V2_0_UNMANAGED.bin` | 登录 Cookie 路径修复 + Windows 手机版误判修复 + SFP 光口开关生效 + 网段 3→6 | `59d69b1dda5058578b8612bb2c21770d` |
+| **V6.1 修复版** | `FG-4GT-2SX_rtlplayground_V6.1_stable.bin` | 登录 Cookie 路径修复 + Windows 手机版误判修复 + SFP 光口开关生效 + 网段 3→6 | `59d69b1dda5058578b8612bb2c21770d` |
 
 > **版本说明**：
 > - 最新版 `V6.2` 位于仓库根目录；历史版本均已归档到仓库 `older/` 文件夹。
