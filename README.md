@@ -2,7 +2,7 @@
 
 > **基于 RTLPlayground 二次开发 · 全中文图形化管理 · 开源免费发布**
 
-![版本](https://img.shields.io/badge/最新版本-v6.1-brightgreen)
+![版本](https://img.shields.io/badge/最新版本-v6.2-brightgreen)
 ![芯片](https://img.shields.io/badge/交换芯片-RTL8372N-blue)
 ![存储](https://img.shields.io/badge/Flash-4MB-orange)
 ![界面](https://img.shields.io/badge/界面-全中文-green)
@@ -15,6 +15,10 @@
 > ⚠️ **重要提醒（V6.1 起）：默认管理网段已从 `192.168.3.x` 变更为 `192.168.6.x`**
 >
 > 管理地址改为 **`http://192.168.6.247`**（网关 `192.168.6.1`）。从旧版（V6.0 及更早，`192.168.3.247`）升级上来的用户，请用新地址访问管理页；如果访问不到，请检查电脑 IP 是否与 `192.168.6.x` 同网段（如 `192.168.6.100`，掩码 `255.255.255.0`），或确认交换机是否已完成开机启动（约需 1~3 分钟）。
+>
+> V6.2 **不改变网段与管理地址**，从 V6.1 直接在线升级即可。
+
+> 🧩 **V6.2 起同步开源固件源码**（MIT 许可）：源码包见 [Release 页面](https://github.com/zakozako2233/RTLPlayground-FG4GT2SX/releases) 附件 `RTLPlayground-FG4GT2SX-src-v6.2.tar.gz`，解压后 `make MACHINE=SWGT024_V2_0_UNMANAGED` 即可自行编译，详见第 15 节。
 
 ---
 
@@ -34,6 +38,7 @@
 12. [反馈与提 Bug](#12-反馈与提-bug)
 13. [安全说明](#13-安全说明)
 14. [开源与免责声明](#14-开源与免责声明)
+15. [源码与自行编译](#15-源码与自行编译)
 
 ---
 
@@ -379,7 +384,7 @@
 
 | 版本 | 文件 | 大小 | MD5 |
 |---|---|---|---|
-| **V6.1 修复版**（最新） | `rtlplayground-v6.1-SWGT024_V2_0_UNMANAGED.bin` | 512KB | `59d69b1dda5058578b8612bb2c21770d` |
+| **V6.2 修复版**（最新） | `rtlplayground-v6.2-SWGT024_V2_0_UNMANAGED.bin` | 512KB | `fe9d86dc7d2504b6570822d1fac6ca3e` |
 
 ### 历史版本（时间轴 · 按发布时间顺序，均位于仓库 `older/` 目录）
 
@@ -393,9 +398,10 @@
 | **V5.8 公开版** | `FG-4GT-2SX_rtlplayground_V5.8_公开版.bin` | 密码统一为 admin | `514f822203114780f4179703625b4070` |
 | **V5.9 稳定版** | `FG-4GT-2SX_rtlplayground_V5.9_公开版_稳定版.bin` | LED 寄存器级灯语修复 | `cd4c589bb55111d93e6965380a4de2b2` |
 | **V6.0 稳定版** | `FG-4GT-2SX_rtlplayground_V6.0_stable.bin` | 手机版保存持久化修复 + 登录全兼容 | `014df8a156d56e836222a69359e407ec` |
+| **V6.1 修复版** | `rtlplayground-v6.1-SWGT024_V2_0_UNMANAGED.bin` | 登录 Cookie 路径修复 + Windows 手机版误判修复 + SFP 光口开关生效 + 网段 3→6 | `59d69b1dda5058578b8612bb2c21770d` |
 
 > **版本说明**：
-> - 最新版 `V6.1` 位于仓库根目录；历史版本均已归档到仓库 `older/` 文件夹。
+> - 最新版 `V6.2` 位于仓库根目录；历史版本均已归档到仓库 `older/` 文件夹。
 > - 所有 512KB 文件均可直接在线升级；若需**编程器整片镜像（4MB）**用于救砖，可在 [Release 页面](https://github.com/zakozako2233/RTLPlayground-FG4GT2SX/releases) 下载历史刷机包。
 
 ---
@@ -419,6 +425,7 @@
 2026-09-30     V6.0 修复版(4)     彻底解决百度内核登录后 404：GET/POST /login、/login/、/login?参数 全部兜底重定向，任意跳转变体都收拢到首页
 2026-09-30     V6.0 修复版(5)     登录协议升级：登录响应改为 200 + 页面自动跳转（meta refresh），不再依赖浏览器对 302 的跟随，全内核 100% 兼容
 2026-10-25     V6.1 修复版        登录 Cookie Path=/ 修复 + Windows 误判手机版修复 + SFP 光口开关真正生效（修复官方原版 bug）
+2026-11-23     V6.2 修复版        端口页面 MTU/名称/速率"应用"错位修复（issue #4）+ 源码开源（MIT）
 ```
 
 ### 每个版本做了什么
@@ -463,7 +470,17 @@
 - 黄灯：2.5G 链路点亮（1G / 低速不亮）
 - 电源灯、SYS 灯保持原厂逻辑，未改动
 
-**V6.1 修复版（最新）**
+**V6.2 修复版（最新）**
+- **修复端口页面"应用"按钮串口错位（Issue #4）**：`/status.json` 是按芯片逻辑端口顺序返回的（两个 SFP 口排在最前，实际顺序为 6、1、2、3、4、5），而端口页的"应用"按钮此前直接拿面板端口号当数组下标去取端口对象——于是点 5 号口（SFP）的"应用"，实际改的是 4 号口，5 号自己的 MTU 被改回 16383，表现就是"点最后两个应用按钮，倒数第四个的 MTU 被重置"。
+  - 新增 `portAt()`：一律按 `portNum` 查找端口对象，不再用数组下标
+  - 修复 `applyPort()`（名称 / 启用 / 速率 / MTU 全部受影响）、端口详情弹窗、顶部端口条的光口图标三处同源错位
+  - 后端 `send_mtu` / `parse_mtu` 经核对与上游 `cmd_parse_port` 的 `phys_to_log_port` 转换一致，无需改动
+- **固件源码开源（MIT 许可）**：完整可编译源码随 Release 发布，见第 15 节
+- 默认管理 IP 不变：**192.168.6.247**（网关 192.168.6.1）
+- 默认密码 `admin`（公开版）
+- 固件版本号：`v6.2-770926a-dirty`
+
+**V6.1 修复版**
 - **登录跳转彻底修复（Issue #1）**：登录成功响应改为 `302 Found` + `Location: /index.html` + `Set-Cookie: session=xxx; Path=/; SameSite=Strict`——补上了缺失的 **`Path=/` 属性**。此前 Cookie 按 RFC 默认只作用于 `/login` 路径，导致登录成功后访问首页和 API 无法携带会话，被判定未登录跳回登录页（部分浏览器表现为"密码错误，请重试"、需重新打开网页）
 - **登录锁定计时修复**：防爆破锁定此前误用秒数叠加到系统 tick 上，实际只锁 0.3 秒；V6.1 统一为 `LOGIN_LOCK_TICKS`（60 秒），暴力破解真正被拒之门外
 - **Windows 11 误显示手机版修复**：UA 判断正则此前匹配 `Mobile` 关键词，Windows 平板模式或部分国产浏览器（UA 携带 Mobile 字样）被误判为手机版；V6.1 前后端 UA 判断均排除 `Windows / Win32 / Win64 / X11`，Windows 设备一律桌面版界面
@@ -496,6 +513,21 @@ A：聚合按流哈希分配，**单条连接只会走一条物理链路**。要
 **Q3：SFP 光口怎么用？**
 A：插入标准千兆 / 2.5G SFP 模块即可正常使用，无需额外配置。**V6.1 起光口支持独立开关**：在「端口管理」页勾选 / 取消勾选光口即可开启或关闭——关闭时 SerDes 断电、状态显示"关"；开启时按当前速率自动配置并重新检测模块。
 
+**Q3-1：没插光模块时光口一直显示"关"，点启用也没反应？**
+A：这是**正常的**。光口状态是「管理使能 **并且** 模块在位」两个条件同时成立才算开启——没有插模块时，无论怎么点启用都显示"关"，因为此时 SerDes 本来就不该出光。另外，**模块检测依赖主板上的 SFP DETECT 引脚**：本固件按睿颖 FG-4GT-2SX 的 PCB 定义（左口 DETECT=GPIO30 / LOS=GPIO37，右口 DETECT=GPIO50 / LOS=GPIO51）。如果你的机器是别的批次或别的品牌（特别是 PCB 丝印带 `V2.0` 后缀的 FG-4GT-2SX 布局），DETECT 引脚接法不同，就会出现"插了模块仍显示空/关"。可以登录后用控制台执行 `sfp` 看检测结果：
+
+```
+sfp                 # 逐槽显示 empty / 厂商 / 速率 / 收发光功率
+sfp 1 1g            # 指定第 1 槽按 1G 速率驱动 SerDes
+sfp 2 10g           # 指定第 2 槽按 10G
+port 5 on           # 管理使能（5/6 为两个光口的面板号）
+```
+
+若插着模块仍显示 `empty`，基本可以判定是 DETECT 引脚与固件定义不符（硬件布局差异），请把主板丝印/照片发到 Issue，后续按板型适配。
+
+**Q3-2：光口能插猫棒（GPON/ONU SFP）吗？**
+A：可以插，但需要把光口速率设对（`sfp <槽> 1g` 或 `2g5`，取决于猫棒），并且猫棒的 I2C 信息要能被读到（`sfp` 命令里能看到厂商/型号）。若显示 I2C 读失败，多为模块兼容性问题或 DETECT 引脚不符。
+
 **Q4：闪存寿命？**
 A：配置仅在保存时写入闪存，日常运行**零写入**；CPU 占用率等监控数据只存内存。按每天保存 10 次配置、闪存 10 万次擦写寿命计算，可用几十年。
 
@@ -524,7 +556,9 @@ A：本固件针对**睿颖 FG-4GT-2SX（RTL8372N）**定制。同芯片的其�
   - 浏览器与设备类型（如 Chrome 桌面 / 百度浏览器手机 / Windows 11 平板）
   - 复现步骤 + 截图 / 录屏
 - **处理方式**：收到后尽快复现并修复，修复版随下一版本发布，并在 README 与 Release 说明中记录致谢。
-- **历史致谢**：感谢 @LFFAnd 反馈的登录跳转异常、Windows 11 手机版误判、SFP 光口开关无效三个问题——已在 **V6.1** 全部修复。
+- **历史致谢**：
+  - 感谢 **@LFFAnd** 反馈的登录跳转异常、Windows 11 手机版误判、SFP 光口开关无效三个问题——已在 **V6.1** 全部修复。
+  - 感谢 **@gentleman-s7** 反馈端口 MTU 被重置 / 端口"应用"错位问题（Issue #4 问题 2）——已在 **V6.2** 修复（根因是端口对象按数组下标而非面板端口号查找，点光口的"应用"会改到相邻电口）。
 
 ---
 
@@ -539,9 +573,50 @@ A：本固件针对**睿颖 FG-4GT-2SX（RTL8372N）**定制。同芯片的其�
 
 ---
 
-## 14. 开源与免责声明
+## 15. 源码与自行编译
 
-本项目基于开源项目 **RTLPlayground**（[github.com/logicog/RTLPlayground](https://github.com/logicog/RTLPlayground)）二次开发，保留上游全部能力并在此基础上增强。固件源码与发行版持续迭代中。
+从 **V6.2** 起，本固件的完整源码随版本一起开源（沿用上游 **MIT License**，可自由修改、二次分发，保留版权声明即可）。
+
+### 获取源码
+
+- **Release 附件**：在 [Release 页面](https://github.com/zakozako2233/RTLPlayground-FG4GT2SX/releases) 的 V6.2 条目下载 `RTLPlayground-FG4GT2SX-src-v6.2.tar.gz`（约 800KB，不含上游 `doc/` 里的大体积 PCB 照片）
+- 解压后目录结构与上游 `logicog/RTLPlayground` 一致：
+
+```
+RTLPlayground/
+├── Makefile              # VERSION 已设为 6.2
+├── machine.c             # 本机型 SWGT024_V2_0_UNMANAGED 的端口映射 / SFP 引脚 / LED 配置
+├── html/                 # 电脑版 index.html + app.js、手机版 m.html、登录页
+├── httpd/                # Web 服务与各 JSON 接口（含 send_status / send_mtu）
+├── cmd_parser.c          # 控制台命令（port / mtu / sfp / lag / acl / storm / ntp ...）
+├── rtl837x_*.c|h         # 芯片寄存器、端口、PHY、LED、LACP、STP 等
+├── uip/  tools/  sdcc/   # 精简 TCP/IP、编译辅助工具、工具链说明
+└── LICENSE               # MIT
+```
+
+### 编译（在 Linux 上）
+
+```bash
+# 依赖：sdcc（8051 编译器）、make、gcc（用于编译 tools/）
+sudo apt install sdcc make gcc
+
+cd RTLPlayground
+make MACHINE=SWGT024_V2_0_UNMANAGED
+# 产物：output/SWGT024_V2_0_UNMANAGED/rtlplayground-v6.2-<git>-SWGT024_V2_0_UNMANAGED.bin
+```
+
+- `MACHINE` 必须指定为 `SWGT024_V2_0_UNMANAGED`（本机型）。
+- 不带 `.git` 目录编译时，版本串里的 commit 段为空、构建日期取当前时间，**二进制不会与发布版逐字节一致**（功能一致），这属正常现象。
+- 产物固定 **524288 字节（512KB）**，末尾 2 字节为 CRC16（覆盖前 0x7FFFE 字节，存 1 的补码）。
+- 编译需要 **sdcc 4.5 及以上**（Debian 12/13 的 `sdcc` 包即可）。
+
+### 改默认 IP / 密码
+
+- **默认 IP / 网关 / 掩码**：改 `config.txt`（刷机后随固件一起写入 Flash 的 0x6F000 与 0x70000 偏移），或改 `rtlplayground.c` 里的启动默认值
+- **默认登录密码**：见 `httpd/httpd.c` 的认证逻辑；公开版统一为 `admin`
+- **端口布局 / SFP 引脚 / LED**：改 `machine.c` 里 `SWGT024_V2_0_UNMANAGED` 那段（`log_to_phys_port`、`is_sfp`、`sfp_port[].pin_detect/pin_los`、`led_sets`）
+
+> 提示：不同批次的 4 电 2 光板子（尤其 PCB 丝印带 `V2.0` 后缀的布局）SFP DETECT 引脚不同，改机型定义前请先对照自己主板实测。
 
 **免责声明**：本固件为个人开源定制项目，刷机有风险，请自行评估后使用。作者不对因刷机造成的任何硬件损坏或数据丢失负责。
 
